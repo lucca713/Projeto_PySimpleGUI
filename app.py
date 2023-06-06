@@ -1,17 +1,18 @@
 def fazer_login(usuario, senha):
-    link_bd = 'https://cadastro-user-dc0d0-default-rtdb.firebaseio.com/'
-    url = f"{link_bd}/Login.json"
+    link_bd = 'https://cadastro-user-dc0d0-default-rtdb.firebaseio.com/' # link do bd
+    url = f"{link_bd}/Login.json" #transforma as informações do banco em um dicionario json
 
-    requisicao = requests.get(url)
-    dados = requisicao.json()
+    requisicao = requests.get(url) #ele da um get (pega) as informações do banco de dados 
+    dados = requisicao.json() # tranforma as informações em uma arquivo json
 
-    for chave, valor in dados.items():
+    for chave, valor in dados.items(): # ele começa um loop lendo chaves e valores do banco de dados
         if valor["cliente"] == usuario and valor["password"] == senha:
+            #aqui se o valor da chave cliente for igual oque o usuario digitou e a mesma coisa para senha ele retorna true
             return True
 
     return False
 
-
+import  webbrowser
 import PySimpleGUI as sg
 import requests
 import json
@@ -21,7 +22,7 @@ layout = [
 [sg.Input(key='usuario')],
 [sg.Text('Senha')],
 [sg.Input(key='senha')],
-[sg.Button('login'), sg.Button('Criar uma conta', key='New_login')],
+[sg.Button('login'), sg.Button('Criar uma conta', key='New_login'), sg.Button('Esqueci a Senha', key='New_password')] ,
 [sg.Text('', key='mensagem')],
 ]
 
@@ -36,11 +37,12 @@ while True:
     
     if event == 'login': #para verificar se o login existe no Banco de dados
         print('ok')
-        usuario = values['usuario']
+        usuario = values['usuario'] #esse usuario e senha vão para os objetos da funcção fazer login e assim compara as informações
         senha = values['senha']
 
         if fazer_login(usuario, senha):
-            sg.popup('Login bem-sucedido')
+            url = 'https://www.youtube.com/watch?v=FwRcSow2QxE&ab_channel=HousetrakTV%232'
+            webbrowser.open(url)
         else:
             sg.popup('Usuário ou senha inválidos')
        
@@ -95,7 +97,7 @@ while True:
     if event == sg.WINDOW_CLOSED:#ele fecha a janela principal
         break           
 
-
+# ------- Funcionalidade do botão esqueci a senha ---------#
 
 
 
