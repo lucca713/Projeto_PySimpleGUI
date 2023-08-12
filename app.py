@@ -1,5 +1,10 @@
+import  webbrowser
+import PySimpleGUI as sg
+import requests
+import json
+
 def fazer_login(usuario, senha):
-    link_bd = 'https://cadastro-user-dc0d0-default-rtdb.firebaseio.com/' # link do bd
+    link_bd = 'https://caduser-40a03-default-rtdb.firebaseio.com/' # link do bd
     url = f"{link_bd}/Login.json" #transforma as informações do banco em um dicionario json
 
     requisicao = requests.get(url) #ele da um get (pega) as informações do banco de dados 
@@ -11,11 +16,13 @@ def fazer_login(usuario, senha):
             return True
 
     return False
+def Banco_dado():
+    link_bd  = 'https://caduser-40a03-default-rtdb.firebaseio.com/'
+    global requisicao
+    requisicao = requests.post(f'{link_bd}/Nome.json', data= json.dumps(user))
+    requisicao = requests.post(f'{link_bd}/Senha.json', data= json.dumps(senha))
+    requisicao = requests.post(f'{link_bd}/Login.json', data= json.dumps(login))
 
-import  webbrowser
-import PySimpleGUI as sg
-import requests
-import json
 
 layout = [  
 [sg.Text('Usuário')],
@@ -83,6 +90,10 @@ while True:
                          
                          'password': new_values['nova_senha']
                          } 
+                Banco_dado()
+                
+                 
+                
                 nova_janela.close() #fecha a janela nova janela que é a do cadastro usuario
                 janela.un_hide() #abre a janela de login
             
@@ -105,14 +116,7 @@ while True:
 
 
 
-#cinfig do banco de dados
 
-link_bd  = 'https://cadastro-user-dc0d0-default-rtdb.firebaseio.com/'
-
-requisicao = requests.post(f'{link_bd}/Nome.json', data= json.dumps(user))
-requisicao = requests.post(f'{link_bd}/Senha.json', data= json.dumps(senha))
-requisicao = requests.post(f'{link_bd}/Login.json', data= json.dumps(login))
-requisicao = requests.get(f'{link_bd}.json')
 
                            
 
