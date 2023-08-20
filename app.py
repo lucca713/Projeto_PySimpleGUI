@@ -17,18 +17,32 @@ def fazer_login(usuario, senha):
 
     return False
 def Banco_dado():
+
     link_bd  = 'https://caduser-40a03-default-rtdb.firebaseio.com/'
     global requisicao
     requisicao = requests.post(f'{link_bd}/Nome.json', data= json.dumps(user))
     requisicao = requests.post(f'{link_bd}/Senha.json', data= json.dumps(senha))
     requisicao = requests.post(f'{link_bd}/Login.json', data= json.dumps(login))
 
+def recuperar_senha(usuario1):
+    link_bd = 'https://caduser-40a03-default-rtdb.firebaseio.com/' # link do bd
+    url = f"{link_bd}/Login.json" #transforma as informações do banco em um dicionario json
+
+    requisicao = requests.get(url) #ele da um get (pega) as informações do banco de dados 
+    dados = requisicao.json() # tranforma as informações em uma arquivo json
+
+    for chave, valor in dados.items(): # ele começa um loop lendo chaves e valores do banco de dados
+        if valor["usuario_esqueci_senha"] == usuario1: #usa só nome para pegar a senha
+           senha1 = valor['password'] 
+           sg.popup(senha1)
+           
+
 
 layout = [  
 [sg.Text('Usuário')],
 [sg.Input(key='usuario')],
 [sg.Text('Senha')],
-[sg.Input(key='senha')],
+[sg.Input(key='senha', password_char='*')],
 [sg.Button('login'), sg.Button('Criar uma conta', key='New_login'), sg.Button('Esqueci a Senha', key='New_password')] ,
 [sg.Text('', key='mensagem')],
 ]
@@ -90,35 +104,51 @@ while True:
                          
                          'password': new_values['nova_senha']
                          } 
-                Banco_dado()
+                Banco_dado() #chama a funcao do banco de dados
                 
                  
                 
                 nova_janela.close() #fecha a janela nova janela que é a do cadastro usuario
                 janela.un_hide() #abre a janela de login
             
-#------- funcionalidade do botão cancelar -----------
+#------- funcionalidade do botão cancelar/ esta dentro do novo login -----------
 
             elif new_event == 'Cancelar' or new_event == sg.WINDOW_CLOSED:
                 nova_janela.close() #fecha a janela nova janela que é a do cadastro usuario
                 janela.un_hide() #abre a janela de login
-        
-        
-                    
+   # ----- template da nova senha ---------#     
+    elif event == 'New_password':
+        janela.hide()
+
+        Nova_senha = [
+
+            [sg.Text('Coloque seu nome de usuario:')],
+            [sg.Input(key='usuario_esqueci_senha')],
+            [sg.Text('Clique no Botao para recuperar a senha:')],
+            [sg.Button('nova_senha_botao')],
+        ] 
+
+        Janela_nova_senha = sg.Window('Recuperar senha', Nova_senha)
+        while True:
+            event_newPassword, values_newPassword = Janela_nova_senha.read()
+            if event_newPassword == sg.WINDOW_CLOSED:
+                Janela_nova_senha.close()
+                janela.un_hide()
+            if event_newPassword == 'nova_senha_botao':
+
+                usuario1 = values['usuario_esqueci_senha']
+
+                recuperar_senha(usuario1)
+                
+
+    
+
     if event == sg.WINDOW_CLOSED:#ele fecha a janela principal
         break           
 
 # ------- Funcionalidade do botão esqueci a senha ---------#
 
 
-
-
-
-
-
-
-
-                           
 
 if requisicao.status_code == 200:
     print('Dados enviados com sucesso para o Firebase.')
