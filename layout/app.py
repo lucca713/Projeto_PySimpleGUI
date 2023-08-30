@@ -1,7 +1,6 @@
-import  webbrowser
+import webbrowser
 import PySimpleGUI as sg
-from funcoes import fazer_login, Banco_dado, recuperar_senha  
-
+from funcoes import fazer_login, Banco_dado, recuperar_senha 
 
 
 
@@ -62,6 +61,7 @@ while True:
             if new_event == 'Fechar' or new_event == sg.WINDOW_CLOSED:
                 break #se o evento for de fechar a janela ela vai fechar 
             elif new_event == 'Criar' :
+               
 
                 user = {'cliente': new_values['novo_usuario']}
 
@@ -71,7 +71,7 @@ while True:
                          
                          'password': new_values['nova_senha']
                          } 
-                Banco_dado() #chama a funcao do banco de dados
+                Banco_dado()#chama a funcao do banco de dados
                 
                  
                 
@@ -117,6 +117,7 @@ while True:
 
 
 if requisicao.status_code == 200:
+
     print('Dados enviados com sucesso para o Firebase.')
 else:
     print('Falha ao enviar os dados para o Firebase.')

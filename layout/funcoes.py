@@ -1,6 +1,7 @@
 import requests
 import json
 import PySimpleGUI as sg
+
 def fazer_login(usuario, senha):
     
     link_bd = 'https://caduser-40a03-default-rtdb.firebaseio.com/' # link do bd
@@ -20,7 +21,8 @@ def Banco_dado():
     
 
     link_bd  = 'https://caduser-40a03-default-rtdb.firebaseio.com/'
-    global requisicao
+    global requisicao, user, senha, login
+    
     requisicao = requests.post(f'{link_bd}/Nome.json', data= json.dumps(user))
     requisicao = requests.post(f'{link_bd}/Senha.json', data= json.dumps(senha))
     requisicao = requests.post(f'{link_bd}/Login.json', data= json.dumps(login))
